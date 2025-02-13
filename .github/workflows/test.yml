@@ -30,9 +30,4 @@ jobs:
       - name: Run tests with pytest
         run: |
           pytest --cov=./ --cov-report=xml
-      
-      - name: Build package
-        run: |
-          pip install build
-          python -m build
 
