@@ -33,6 +33,10 @@ jobs:
           username: ec2-user
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            # Install necessary dependencies
+            sudo yum install -y git
+            sudo yum install -y nginx
+
             # Create project directory structure
             mkdir -p /home/ec2-user/fastapi-book-project
             cd /home/ec2-user/fastapi-book-project
@@ -50,7 +54,7 @@ jobs:
             pip install -r requirements.txt
             
             # Update systemd service file with correct paths
-            sudo /etc/systemd/system/fastapi.service << EOF
+            sudo tee /etc/systemd/system/fastapi.service << EOF
             [Unit]
             Description=FastAPI application
             After=network.target
