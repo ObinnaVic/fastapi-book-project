@@ -20,12 +20,11 @@ jobs:
 
       - name: Install and configure Nginx
         run: |
-          cd /home/victor-nkire/Desktop/fastapi-book-project
-          git pull origin main
-          source venv/bin/activate
-          pip install -r requirements.txt
-          sudo systemctl restart fastapi
-          sudo systemctl restart nginx
+          sudo apt-get update
+          sudo apt-get install -y nginx
+          sudo cp nginx.conf /etc/nginx/sites-available/fastapi
+          sudo nginx -t
+          sudo systemctl start nginx
 
       - name: Deploy to Render
         run: |
