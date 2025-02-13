@@ -33,12 +33,56 @@ jobs:
           username: ec2-user
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /home/victor-nkire/Desktop/fastapi-book-project
-            git pull origin main
+            # Create project directory structure
+            mkdir -p /home/ec2-user/fastapi-book-project
+            cd /home/ec2-user/fastapi-book-project
+            
+            # Clone/pull repository
+            if [ -d ".git" ]; then
+              git pull origin main
+            else
+              git clone https://github.com/ObinnaVic/fastapi-book-project .
+            fi
+            
+            # Set up Python virtual environment
+            python3 -m venv venv
             source venv/bin/activate
             pip install -r requirements.txt
+            
+            # Update systemd service file with correct paths
+            sudo tee /etc/systemd/system/fastapi.service << EOF
+            [Unit]
+            Description=FastAPI application
+            After=network.target
+
+            [Service]
+            User=ec2-user
+            WorkingDirectory=/home/ec2-user/fastapi-book-project
+            ExecStart=/home/ec2-user/fastapi-book-project/venv/bin/uvicorn main:app --host 0.0.0.0 --port 8000
+            Restart=always
+
+            [Install]
+            WantedBy=multi-user.target
+            EOF
+            
+            # Reload and restart services
+            sudo systemctl daemon-reload
+            sudo systemctl enable fastapi
             sudo systemctl restart fastapi
             sudo systemctl restart nginx
+
+
+
+
+
+
+
+            # cd /home/victor-nkire/Desktop/fastapi-book-project
+            # git pull origin main
+            # source venv/bin/activate
+            # pip install -r requirements.txt
+            # sudo systemctl restart fastapi
+            # sudo systemctl restart nginx
 
 
           
