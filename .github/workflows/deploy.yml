@@ -18,6 +18,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Install and configure Nginx
+        run: |
+          cd /home/victor-nkire/Desktop/fastapi-book-project
+          git pull origin main
+          source venv/bin/activate
+          pip install -r requirements.txt
+          sudo systemctl restart fastapi
+          sudo systemctl restart nginx
+
       - name: Deploy to Render
         run: |
           curl -X POST "https://api.render.com/v1/services/${{ secrets.SERVICE_ID }}/deploys" \
@@ -25,13 +34,6 @@ jobs:
           -H "Accept: application/json" \
           -H "Content-Type: application/json" \
           -d '{}'
-      
-
-      # - name: Deploy to production
-      #   uses: 
-      #   with: 
-      #     service-id: ${{ secrets.SERVICE_ID }}
-      #     api-key: ${{ secrets.RENDER_API_KEY }}
 
 
           
