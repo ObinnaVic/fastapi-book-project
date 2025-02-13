@@ -50,7 +50,7 @@ jobs:
             pip install -r requirements.txt
             
             # Update systemd service file with correct paths
-            sudo tee /etc/systemd/system/fastapi.service << EOF
+            sudo /etc/systemd/system/fastapi.service << EOF
             [Unit]
             Description=FastAPI application
             After=network.target
