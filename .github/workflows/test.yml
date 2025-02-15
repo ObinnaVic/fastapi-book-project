@@ -1,4 +1,4 @@
-
+name: test
 on: 
   push:
     branches:
@@ -6,22 +6,21 @@ on:
       
 jobs:
   test:
-    name: test
     runs-on: ubuntu-latest
     
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python
+      - uses: actions/checkout@v4
+      - name: Set up Python 3.12
         uses: actions/setup-python@v3
         with: 
-          python-version: '3.10'
+          python-version: '3.12'
 
       - name: Install dependencies
         run: |
           python -m venv venv
           source venv/bin/activate
-          pip install pytest
           pip install -r requirements.txt
+          echo "Installing project dependencies"
       
       - name: Run tests with pytest
         run: |
