@@ -48,15 +48,15 @@ async def get_books() -> OrderedDict[int, Book]:
     return db.get_books()
 
 # missing api implementation
-@router.get("/{book_id}", response_model=Optional[Book], status_code=status.HTTP_200_OK)
-async def get_book(book_id: int) -> Optional[Book]:
+@router.get("/{book_id}", response_model= Book, status_code=status.HTTP_200_OK)
+async def get_book(book_id: int):
     book = db.get_book(book_id)
-    if book is None:
+    if not book:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Book not found"
+            detail="Book not found"
         )
-    return book;
+    return book
 
 @router.put("/{book_id}", response_model=Book, status_code=status.HTTP_200_OK)
 async def update_book(book_id: int, book: Book) -> Book:
