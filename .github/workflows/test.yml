@@ -1,20 +1,17 @@
 name: test
 on: 
-  pull_request:
-    branches:
-      - main
-      
+    pull_request:
+        branches:
+            - main
 jobs:
   test:
     runs-on: ubuntu-latest
-    
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Python 3.12
+      - name: Set up Python
         uses: actions/setup-python@v3
-        with: 
+        with:
           python-version: '3.12'
-
       - name: Install dependencies
         run: |
           python -m venv venv
@@ -26,4 +23,3 @@ jobs:
         run: |
           source venv/bin/activate
           pytest
-
